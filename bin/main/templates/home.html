@@ -1,16 +1,131 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>홈</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title th:text="#{page.home}">홈</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+            padding: 2rem;
+        }
+        header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        header h1 {
+            font-weight: 800;
+            color: #0d6efd;
+            font-size: 2.8rem;
+            margin-bottom: 0.25rem;
+        }
+        header p.subtitle {
+            font-size: 1.25rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .welcome-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            padding: 2rem 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .welcome-card p {
+            font-size: 1.125rem;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        .btn-action {
+            width: 140px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            padding: 0.6rem 1.2rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            text-decoration: none;
+        }
+        .btn-login {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            margin-right: 1rem;
+        }
+        .btn-login:hover,
+        .btn-login:focus {
+            background-color: #0b5ed7;
+            box-shadow: 0 0 10px rgba(13, 110, 253, 0.6);
+            color: white;
+        }
+        .btn-register {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+        .btn-register:hover,
+        .btn-register:focus {
+            background-color: #5c636a;
+            box-shadow: 0 0 10px rgba(108, 117, 125, 0.6);
+            color: white;
+        }
+        footer {
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+    </style>
 </head>
 <body>
-<h1>홈</h1>
-<hr>
-<p>안녕하세요! Spring MVC2 예제 사이트에 오신 것을 환영합니다.</p>
+<header>
+    <h1 th:text="#{page.home}">홈</h1>
+    <p class="subtitle">Spring MVC2 예제 사이트에 오신 것을 환영합니다</p>
+    <hr />
+</header>
 
-<a th:href="@{/login}">로그인</a> |
-<a th:href="@{/members/add}">회원가입</a>
+<main>
+    <section class="welcome-card" aria-label="사이트 환영 메시지 및 주요 기능 안내">
+        <p>
+            이 사이트는 Spring MVC2를 활용하여 만들어진 실습용 웹 애플리케이션입니다.<br />
+            회원가입과 로그인 기능을 제공하며, 상품 목록과 관리 기능도 포함하고 있습니다.
+        </p>
+        <nav aria-label="회원 관련 작업">
+            <a th:href="@{/login}" class="btn-action btn-login" role="button" aria-label="로그인 페이지로 이동">
+                <i class="fa-solid fa-right-to-bracket"></i> <span th:text="#{page.login}">로그인</span>
+            </a>
+            <a th:href="@{/members/register}" class="btn-action btn-register" role="button" aria-label="회원가입 페이지로 이동">
+                <i class="fa-solid fa-user-plus"></i> <span th:text="#{page.register}">회원가입</span>
+            </a>
+        </nav>
+    </section>
+
+    <section aria-label="사이트 특징 소개">
+        <h2 style="text-align:center; color:#495057; margin-bottom:1rem;">주요 특징</h2>
+        <ul style="max-width: 480px; margin: 0 auto; color:#6c757d; line-height:1.6; list-style:none; padding-left:0;">
+            <li><i class="fa-solid fa-check-circle" style="color:#0d6efd; margin-right:0.5rem;"></i> Spring MVC2 기반의 견고한 아키텍처</li>
+            <li><i class="fa-solid fa-check-circle" style="color:#0d6efd; margin-right:0.5rem;"></i> 회원가입, 로그인, 인증 기능 완비</li>
+            <li><i class="fa-solid fa-check-circle" style="color:#0d6efd; margin-right:0.5rem;"></i> 상품 등록, 수정, 삭제 기능 및 검색 지원</li>
+            <li><i class="fa-solid fa-check-circle" style="color:#0d6efd; margin-right:0.5rem;"></i> 반응형 UI 및 사용자 친화적 디자인</li>
+        </ul>
+    </section>
+</main>
+
+<footer>
+    &copy; 2025 Spring MVC2 예제 사이트
+</footer>
 
 </body>
 </html>
