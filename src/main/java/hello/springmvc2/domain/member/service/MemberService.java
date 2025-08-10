@@ -1,11 +1,9 @@
 package hello.springmvc2.domain.member.service;
 
-import java.util.List;
-import java.util.function.Supplier;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import hello.springmvc2.domain.member.controller.form.MemberSaveForm;
 import hello.springmvc2.domain.member.controller.form.MemberUpdateForm;
@@ -22,65 +20,63 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private final MemberRepository memberRepository;
-	private final BCryptPasswordEncoder passwordEncoder;
+    private static final String NOT_FOUND_MESSAGE = "회원이 존재하지 않습니다. id=%d";
 
-	public Member findMemberById(Long id) {
-		return memberRepository.findById(id)
-				.orElseThrow(() -> new MemberNotFoundException("회원이 존재하지 않습니다. id=" + id));
-	}
-	
-	public List<MemberDto> findAllMembers() {
-		return memberRepository.findAll().stream()
-				.map(member -> MemberMapper.toViewDto(member))
-				.toList();
-	}
+    private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
 
-	public MemberDto registerMember(MemberSaveForm form, BindingResult bindingResult) {
-		validateDuplication(form, bindingResult);
-		if (bindingResult.hasErrors()) {
-			return null;
-		}
+    public MemberDto getMemberDto(Long id) {
+        return memberMapper.toViewDto(getMemberOrThrow(id));
+    }
 
-		String encryptedPassword = passwordEncoder.encode(form.getPassword());
-		Member member = MemberMapper.toEntity(encryptedPassword, form);
-		member = memberRepository.save(member);
-		return MemberMapper.toViewDto(member);
-	}
+    public MemberUpdateForm getMemberUpdateForm(Long id) {
+        return memberMapper.toForm(getMemberOrThrow(id));
+    }
 
-	public MemberDto updateMember(Long id, MemberUpdateForm form, BindingResult bindingResult) {
-		validateIdMatch(id, form::getId);
-		
-		Member existingMember = findMemberById(id);
-		
-		String encryptedPassword = passwordEncoder.encode(form.getPassword());
-		Member updatedMember = MemberMapper.toEntity(encryptedPassword, 
-													 existingMember, 
-													 form);
+    public List<MemberDto> getAllMembers() {
+        return memberRepository.findAll().stream()
+                .map(memberMapper::toViewDto)
+                .toList();
+    }
 
-		boolean updated = memberRepository.update(updatedMember);
-		if(!updated) {
-			throw new MemberNotFoundException("수정할 회원이 존재하지 않습니다.");
-		}
-		return MemberMapper.toViewDto(updatedMember);
-	}
-	
+    public MemberDto registerMember(MemberSaveForm form) {
+        Member member = memberMapper.toEntity(form);
+        member = memberRepository.save(member);
+        return memberMapper.toViewDto(member);
+    }
+
+    public MemberDto updateMember(Long id, MemberUpdateForm form) {
+        validateIdMatch(id, form.getId());
+
+        Member existingMember = getMemberOrThrow(id);
+        Member updatedMember = memberMapper.toEntity(existingMember, form);
+
+        if (!memberRepository.update(updatedMember)) {
+            throw new MemberNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
+        }
+        return memberMapper.toViewDto(updatedMember);
+    }
+
     public void deleteMember(Long id) {
-        boolean deleted = memberRepository.delete(id);
-        if (!deleted) {
-            throw new MemberNotFoundException("삭제할 회원이 존재하지 않습니다. id=" + id);
+        if (!memberRepository.delete(id)) {
+            throw new MemberNotFoundException(String.format(NOT_FOUND_MESSAGE, id));
         }
     }
-	
-    private void validateDuplication(MemberSaveForm form, BindingResult bindingResult) {
-		memberRepository.findByUsername(form.getUsername()).ifPresent(m -> {
-			bindingResult.rejectValue("username", "member.duplicatedUsername");
-		});
+
+    private Member getMemberOrThrow(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException(String.format(NOT_FOUND_MESSAGE, id)));
+    }
+
+    public boolean existsByLoginId(String loginId) {
+    	return memberRepository.findByLoginId(loginId).isPresent();
     }
     
-	private void validateIdMatch(Long pathId, Supplier<Long> formIdSupplier) {
-		if(!pathId.equals(formIdSupplier.get())) {
-            throw new IllegalArgumentException("Path variable id와 form의 id가 일치하지 않습니다. pathId: " + pathId + ", formId: " + formIdSupplier.get());
-		}
-	}
+    private void validateIdMatch(Long pathId, Long formId) {
+        if (!pathId.equals(formId)) {
+            throw new IllegalArgumentException(
+                String.format("Path variable id(%d)와 form의 id(%d)가 일치하지 않습니다.", pathId, formId)
+            );
+        }
+    }
 }

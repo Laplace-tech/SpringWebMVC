@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import hello.springmvc2.domain.item.controller.form.ItemUpdateForm;
 import hello.springmvc2.domain.item.controller.mapper.ItemMapper;
 import hello.springmvc2.domain.item.entry.Item;
 import hello.springmvc2.domain.item.service.ItemService;
+import hello.springmvc2.domain.item.validator.ItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,6 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ItemController {
 
 	private final ItemService itemService;
+	private final ItemValidator itemValidator;
+	
+	@InitBinder("form")
+	public void initItemUpdateFormValidator(WebDataBinder binder) {
+		binder.addValidators(itemValidator);
+	}
 	
 	@GetMapping
 	public String listItems(Model model) {
@@ -54,7 +63,7 @@ public class ItemController {
 						   BindingResult bindingResult,
 						   RedirectAttributes redirectAttributes) {
 		
-		itemService.validateTotalPrice(form, bindingResult);
+		// 개별 Validator에서 validateTotalPrice도 수행함
 		if(bindingResult.hasErrors()) {
 			log.warn("상품 등록 유효성 실패 : {}", bindingResult);
 			return "items/addForm";
@@ -79,7 +88,7 @@ public class ItemController {
                              @Validated @ModelAttribute("form") ItemUpdateForm form,
                              BindingResult bindingResult) {
     	
-    	itemService.validateTotalPrice(form, bindingResult);
+    	// 개별 Validator에서 validateTotalPrice도 수행함
         if (bindingResult.hasErrors()) {
             log.warn("상품 수정 유효성 실패: {}", bindingResult);
             return "items/editForm";

@@ -29,10 +29,10 @@ public class DataInitializer {
 		itemRepository.save(new Item(null, "테스트 아이템2", 20000, 20));
 		itemRepository.save(new Item(null, "테스트 아이템3", 30000, 30));
 
-		Member member1 = Member.builder().username("Anna").password(passwordEncdoer.encode("28482848a")).name("Anna")
-				.registeredAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
-		Member member2 = Member.builder().username("Anna").password(passwordEncdoer.encode("28482848a")).name("Anna")
-				.registeredAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+		Member member1 = Member.builder().loginId("Anna").encryptedPassword(passwordEncdoer.encode("28482848a")).displayName("Anna")
+				.createdAt(LocalDateTime.now()).lastModifiedAt(LocalDateTime.now()).build();
+		Member member2 = Member.builder().loginId("Erma").encryptedPassword(passwordEncdoer.encode("28482848a")).displayName("Erma")
+				.createdAt(LocalDateTime.now()).lastModifiedAt(LocalDateTime.now()).build();
 		memberRepository.save(member1);
 		memberRepository.save(member2);
 	}

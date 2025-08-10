@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -31,15 +30,15 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(loginMemberArgumentResolver);
     }
     
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-    	registry.addInterceptor(loginCheckInterceptor)
-    			.order(1)
-    			.addPathPatterns("/**")
-    			.excludePathPatterns(
-                        "/", "/members/new", "/login", "/logout", "/members/add",
-                        "/css/**", "/*.ico", "/error"
-                );
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//    	registry.addInterceptor(loginCheckInterceptor)
+//    			.order(1)
+//    			.addPathPatterns("/**")
+//    			.excludePathPatterns(
+//                        "/", "/members/new", "/login", "/logout", "/members/add",
+//                        "/css/**", "/*.ico", "/error"
+//                );
+//    }
     
 }

@@ -20,22 +20,21 @@ public class MemoryMemberRepository implements MemberRepository {
     @Override
     public Member save(Member member) {
         long memberId = sequence.incrementAndGet();
-        Member newMember = member.toBuilder()
-                                 .id(memberId)
-                                 .build();
-        store.put(memberId, newMember);
-        log.info("Member saved: {}", newMember);
-        return newMember;
+        member = setId(member, memberId);
+        store.put(memberId, member);
+        log.info("Member saved: {}", member);
+        return member;
     }
 
 	@Override
 	public Optional<Member> findById(Long id) {
 		return Optional.ofNullable(store.get(id));
 	}
+	
 	@Override
-	public Optional<Member> findByUsername(String username) {
+	public Optional<Member> findByLoginId(String loginId) {
 		return store.values().stream()
-				.filter(member -> member.getUsername().equals(username))
+				.filter(member -> member.getLoginId().equals(loginId))
 				.findFirst();
 	}
 	@Override
@@ -65,7 +64,11 @@ public class MemoryMemberRepository implements MemberRepository {
         return removed;
 	}
 	
-	
+	private Member setId(Member member, long sequenceId) {
+		return member.toBuilder()
+					.id(sequenceId)
+					.build();
+	}
 	
 	
 }

@@ -32,17 +32,25 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
 								  NativeWebRequest webRequest, 
 								  WebDataBinderFactory binderFactory) throws Exception {
 		
-		HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        if(request == null) {
+        	log.error("HttpServletRequest를 가져올 수 없음");
+        	return null;
+        }
+		
 		HttpSession session = request.getSession(false);
-        
 		if (session == null) {
             log.info("세션이 존재하지 않음");
             return null;
         }
 
-        Object loginMember = session.getAttribute(SessionConst.LOGIN_MEMBER);
+		MemberDto loginMember = (MemberDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
+		if(loginMember == null) {
+			log.info("세션에 로그인 멤버 정보가 없음");
+			return null;
+		}
+		
         log.info("세션에서 조회한 로그인 사용자: {}", loginMember);
-        
         return loginMember;
     }
 	

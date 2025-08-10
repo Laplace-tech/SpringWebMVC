@@ -10,7 +10,7 @@ import lombok.Getter;
 public class MemberDto {
 
 	private final Long id;
-	private final String username;
-	private final String name;
+	private final String loginId;
+	private final String displayName;
 	
 }

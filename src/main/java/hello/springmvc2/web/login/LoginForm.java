@@ -1,10 +1,10 @@
-package hello.springmvc2.domain.member.controller.form;
+package hello.springmvc2.web.login;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 /**
  * @NotNull(모든 타입) 
@@ -29,22 +29,14 @@ import lombok.Setter;
  * - 범위 지정
  */
 
-
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-public class MemberSaveForm {
+public class LoginForm {
 
-	@NotBlank(message = "{member.loginId.notBlank}")
-	@Size(min = 4, max = 20, message = "{member.loginId.size}")
-	private String loginId;
+	@NotBlank(message = "{login.form.username}")
+	private String username;
 	
-	@NotBlank(message = "{member.password.notBlank}")
-	@Size(min = 8, max = 20, message = "{member.password.size}")
+	@NotBlank(message = "{login.form.password}")
 	private String password;
-	
-	@NotBlank(message = "{member.displayName.notBlank}")
-	@Size(min = 2, max = 16, message = "{member.displayName.size}")
-	private String displayName;
-	
 }

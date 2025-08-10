@@ -2,35 +2,135 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>회원 목록</title>
+    <title th:text="#{page.members}">회원 목록</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #4e73df, #224abe);
+            padding: 20px 40px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .table-container {
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eaecef;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fc;
+            font-weight: 600;
+            color: #4e73df;
+        }
+        tr:hover td {
+            background-color: #f1f5ff;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary {
+            background-color: #4e73df;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #224abe;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            border: 1px solid #4e73df;
+            color: #4e73df;
+            background: white;
+        }
+        .btn-outline:hover {
+            background-color: #eaf0ff;
+            transform: translateY(-1px);
+        }
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
-<h1>회원 목록</h1>
-<hr>
+<header>
+    <h1 th:text="#{page.members}">회원 목록</h1>
+</header>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>아이디(Username)</th>
-        <th>이름</th>
-        <th>상세</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="member : ${members}">
-        <td th:text="${member.id}"></td>
-        <td th:text="${member.username}"></td>
-        <td th:text="${member.name}"></td>
-        <td>
-            <a th:href="@{/members/{id}(id=${member.id})}">상세보기</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<main>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{label.member.id}">ID</th>
+                <th th:text="#{label.member.loginId}">로그인 ID</th>
+                <th th:text="#{label.member.displayName}">이름</th>
+                <th th:text="#{label.member.detail}">상세</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.id}"></td>
+                <td th:text="${member.loginId}"></td>
+                <td th:text="${member.displayName}"></td>
+                <td>
+                    <a class="btn btn-outline" th:href="@{/members/{id}(id=${member.id})}">상세보기</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<a th:href="@{/members/register}">회원가입</a> |
-<a th:href="@{/}">홈</a>
-
+    <div class="btn-container">
+        <a class="btn btn-primary" th:text="#{button.signup}" th:href="@{/members/register}">회원가입</a>
+        <a class="btn btn-outline" th:text="#{page.home}" th:href="@{/}">홈</a>
+    </div>
+</main>
 </body>
 </html>

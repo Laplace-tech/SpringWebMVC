@@ -19,11 +19,14 @@ public class MemberUpdateForm {
 	@NotNull(message = "{member.id.notNull}")
 	private Long id;
 	
+	@NotBlank(message = "{member.loginId.notBlank}")
+    private String loginId;
+	
 	@NotBlank(message = "{member.password.notBlank}")
 	@Size(min = 8, max = 20, message = "{member.password.size}")
 	private String password;
 	
-	@NotBlank(message = "{member.name.notBlank}")
-	@Size(min = 2, max = 16, message = "{member.name.size}")
-	private String name;
+	@NotBlank(message = "{member.displayName.notBlank}")
+	@Size(min = 2, max = 16, message = "{member.displayName.size}")
+	private String displayName;
 }

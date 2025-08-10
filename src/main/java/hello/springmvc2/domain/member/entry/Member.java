@@ -14,11 +14,11 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 public class Member {
-
     private final Long id;
-    private final String username;       // 로그인 아이디 (unique)
-    private final String password;       // 암호화된 비밀번호
-    private final String name;           // 사용자 이름
-    private final LocalDateTime registeredAt;  // 가입일시
-    private final LocalDateTime updatedAt;     // 최근 수정일시
+    private final String loginId;               // 로그인 아이디 (unique)
+    private final String encryptedPassword;    // 암호화된 비밀번호
+    private final String displayName;           // 사용자 이름 (표시명)
+    private final LocalDateTime createdAt;      // 가입 일시
+    private final LocalDateTime lastModifiedAt; // 최근 수정 일시
 }
+
